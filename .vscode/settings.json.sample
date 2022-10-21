@@ -1,0 +1,83 @@
+// Create a new file `settings.json` and copy this content
+
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+
+    // Additional import search resolution paths
+    "python.analysis.extraPaths": [
+    ],
+
+    // Minimal log level to show on output window
+    "python.analysis.logLevel": "Trace",
+
+    // List of paths to libraries and the like that need to be imported
+    // by the auto complete engine.
+    "python.autoComplete.extraPaths": [
+    ],
+
+    // Static type checker, basic mode will display type mismatch warnings
+    "python.analysis.typeCheckingMode": "basic",
+
+    // Sort imports
+    "python.sortImports.path": "${workspaceFolder}/.venv/bin/isort",
+    "python.sortImports.args": [
+        "-sp isort.cfg"
+    ],
+
+    // Linter
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    // disable default option, which is pylint
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        // "--ignore=E24,W504,E203,W503",
+        "--max-line-length=88",
+        "--verbose",
+        "--exclude=dao/database/migrations/*.py",
+    ],
+
+    // Code formatter
+    "python.formatting.provider": "black",
+
+    "[python]": {
+        "editor.rulers": [
+            // Black recommends, match with `isort.cfg`
+            88,
+        ],
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+
+        // black
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+
+        // isort
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+
+    // So that they don't appear in the explorer
+    "files.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/node_modules": true,
+        "**/.serverless": true,
+    },
+
+    // So that their contents don't appear when searching across files
+    "search.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/node_modules": true,
+        "**/.serverless": true,
+    },
+}
