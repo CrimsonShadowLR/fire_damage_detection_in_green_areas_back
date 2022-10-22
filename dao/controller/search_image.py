@@ -49,12 +49,12 @@ def get_bounding_box_from_file(file):
 
 
 def SearchImage(top: float, bottom: float, left: float, right: float):
-    area_of_interest = {
-        "left": left,
-        "bottom": bottom,
-        "right": right,
-        "top": top,
-    }  # noqa
+    # area_of_interest = {
+    #     "left": left,
+    #     "bottom": bottom,
+    #     "right": right,
+    #     "top": top,
+    # }
 
     images = []
 
