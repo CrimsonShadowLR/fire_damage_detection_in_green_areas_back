@@ -1,5 +1,5 @@
 """
-This code is to load images and masks: data loader
+Load images and masks helper functions
 Input:
 -Satelite Images (CH,H,W)
 Output:

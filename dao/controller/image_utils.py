@@ -14,15 +14,10 @@ from torch.autograd import Variable
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-def preprocess_image(img, dataset):
-    """Normaliza y transforma la imagen en un tensor apto para ser procesado por la
-    red neuronal de segmentación de
-    cuerpos de agua.
-    Dimensiones: entrada: (X,512,512); salida: (1,X,512,512)
-    :param img: imagen por preprocesar
-    :type img: np.ndarray
-    :param dataset: tipo de tarea
-    :type dataset: str
+def preprocess_image(img, dataset: str):
+    """
+    Image is converted in a proper tensor, so it can be procesed by the neural network
+    Input shape: (X,512,512); Output shape: (1,X,512,512)
     """
     img = img.transpose((1, 2, 0))
     image_transform = transform_function(dataset)
@@ -34,7 +29,9 @@ def preprocess_image(img, dataset):
 
 
 def transform_function(satelite):
-    """Función de normalización para una imagen satelital."""
+    """
+    Normalize the values of the tensor
+    """
     if satelite == 2:
         image_transform = DualCompose(
             [
@@ -79,11 +76,8 @@ def transform_function(satelite):
 
 
 def create_patches(dataset):
-    """Genera bloques de (x,512,512) píxeles a partir de una imagen satelital.
-       donde x es la cantidad de bandas espectrales dependiente del satelite
-
-    :param dataset: lector de conjunto de datos ráster
-    :type dataset: rio.DatasetReader
+    """
+    Generates blocks of (x, 512, 512) pixels from a satellite image.
     """
     patches = []
 
@@ -119,25 +113,9 @@ def create_patches(dataset):
 
 
 def reconstruct_image(masks, metadata, img_shape, filename, level):
-    """Combina un conjunto de bloques de (1,4,512,512) píxeles para generar una máscara
-    de segmentación de cuerpos de
-    agua y guarda el resultado localmente.
-
-    :param masks: lista de máscaras - arrays -  de (1,4,512,512) píxeles;
-    :type masks: np.ndarra
-
-    :param metadata: diccionario con los metadatos de la imagen satelital original;
-    :type metadata: dict
-
-    :param img_shape: dimensiones de la imagen satelital original;
-    :type img_shape: tuple
-
-    :param filename: nombre del archivo que contenía a la imagen original
-    :type filename: str
-
-    :param level: nivel socioeconómico
-    :type level: str
-
+    """
+    Combines a set of (1, 4, 512, 512) pixel blocks to generate a segmentation mask
+    and saves the resulting mask locally.
     """
     pos = 0
     # C, H, W
@@ -174,11 +152,10 @@ def reconstruct_image(masks, metadata, img_shape, filename, level):
 
 
 def define_mask(mask):
+    """
+    Gets the first value of the segmentation mask
+    """
     mask = mask[0]
-    # roof_mask = roof_mask[0][0]
-
-    # mask[0] = mask[0] * roof_mask
-    # mask[1] = mask[1] * roof_mask
 
     for x in range(512):
         for y in range(512):
@@ -189,27 +166,8 @@ def define_mask(mask):
 
 
 def convert_mask_to_png(filename, raster, metadata, colours, level):
-    """Transforma una máscara en una imagen png para su visualización en plataformas web.
-
-    :param filename: ruta de la máscara originalmente generada como TIF
-    :type filename: str
-
-
-    :param raster: matriz bidimensional con los valores de la máscara
-    :type raster: np.ndarray
-
-
-    :param metadata: diccionario con los metadatos de la máscara
-    :type metadata: dict
-
-    :param colours: colores para colorear la máscara
-    :type colours: tuple[int, int, int]
-
-    :param level: índice del nivel
-    :type level: str
-
-    :rtype: str
-
+    """
+    Transforms a mask into a PNG image for visualization on web platforms.
     """
     new_metadata = metadata
     new_metadata["count"] = 3
@@ -231,20 +189,8 @@ def convert_mask_to_png(filename, raster, metadata, colours, level):
 
 
 def convert_raster_to_png(filename, raster, metadata):
-    """Transforma una imagen satelital en una imagen png para su visualización en
-    plataformas web.
-
-    :param filename: ruta del raster original
-    :type filename: str
-
-
-    :param raster: matriz bidimensional con los valores del raster
-    :type raster: np.ndarray
-
-
-    :param metadata: diccionario con los metadatos del raster
-    :type metadata: dict
-
+    """
+    Converts a satellite image into a PNG image for visualization on web platforms.
     """
     new_metadata = metadata
     new_metadata["count"] = 3
@@ -262,12 +208,15 @@ def convert_raster_to_png(filename, raster, metadata):
 
 
 def get_png_raster(filepath, sftp, metadata):
-    last_slash = filepath.rfind("/") + 1  # Ocurrencia de la última diagonal + 1
-    last_dot = filepath.rfind(".")  # Ocurrencia del último punto
-    filename = filepath[last_slash:last_dot]  # Nombre de la imagen
+    """
+    Converts an image file to a PNG format and saves it to a specified directory
+    """
+    last_slash = filepath.rfind("/") + 1  # Occurrence of the last slash + 1
+    last_dot = filepath.rfind(".")  # Occurrence of the last dot
+    filename = filepath[last_slash:last_dot]  # Image name
 
-    last_slash = filepath.rfind("/") + 1  # Ocurrencia de la última diagonal + 1
-    last_dot = filepath.rfind(".")  # Ocurrencia del último punto
+    last_slash = filepath.rfind("/") + 1  # Occurrence of the last slash + 1
+    last_dot = filepath.rfind(".")  # Occurrence of the last dot
     filepath = (
         filepath[:last_slash]
         + "PREVIEW"

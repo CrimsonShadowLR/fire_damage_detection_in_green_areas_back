@@ -1,6 +1,6 @@
 from typing import List
 
-from api.schema.adapters import FSBaseModel
+from api.schema.adapters import CustomBaseModel
 from pydantic import BaseModel
 
 
@@ -11,11 +11,11 @@ class BoundingBox(BaseModel):
     top: float
 
 
-class ImageOut(FSBaseModel):
+class ImageOut(CustomBaseModel):
     path: str
     name: str
     bounding_box: BoundingBox
 
 
-class ImagesOut(FSBaseModel):
+class ImagesOut(CustomBaseModel):
     images: List[ImageOut]

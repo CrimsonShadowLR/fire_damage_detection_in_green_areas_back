@@ -6,23 +6,15 @@ from pyproj import Transformer
 from rasterio.io import MemoryFile
 
 
-def rect_overlap(l1, r1, l2, r2):
-    if l1[0] <= r2[0] or l2[0] <= r1[0]:
-        return False
-
-    if l1[1] >= r2[1] or l2[1] >= r1[1]:
-        return False
-
-    return True
-
 
 def get_bounding_box(dataset):
-    """Obtiene las coordenadas de una imagen satelital en formato EPSG:4326
+    """
+    Obtains the coordinates of a satellite image in EPSG:4326 format.
 
-    :param dataset: lector de conjunto de datos ráster
+    :param dataset: a raster dataset reader
     :type dataset: rio.DatasetReader
     """
-    # Obtiene el bounding box original
+    # Retrieves the original bounding box
 
     origin_bb = dataset.bounds
 
@@ -41,6 +33,19 @@ def get_bounding_box(dataset):
 
 
 def get_bounding_box_from_file(file):
+    """
+    Extracts the bounding box coordinates from a raster file.
+
+    Reads the contents of the specified file, retrieves the bounding box information
+    from the raster dataset, and returns the coordinates in EPSG:4326 format.
+
+    Parameters:
+    file (str): The path to the raster file.
+
+    Returns:
+    dict: A dictionary containing the coordinates of the bounding box
+          in EPSG:4326 format, with keys 'left', 'bottom', 'right', and 'top'.
+    """
     file = open(file, "rb")
     data = file.read()
     memfile = MemoryFile(data)
@@ -49,13 +54,22 @@ def get_bounding_box_from_file(file):
 
 
 def SearchImage(top: float, bottom: float, left: float, right: float):
-    # area_of_interest = {
-    #     "left": left,
-    #     "bottom": bottom,
-    #     "right": right,
-    #     "top": top,
-    # }
+    """
+    Searches for images within the specified geographical coordinates.
 
+    Retrieves images from a directory, obtains their bounding box information,
+    and generates a list of ImageOut objects containing image metadata.
+
+    Parameters:
+    top (float): The top latitude of the search area.
+    bottom (float): The bottom latitude of the search area.
+    left (float): The left longitude of the search area.
+    right (float): The right longitude of the search area.
+
+    Returns:
+    ImagesOut: A collection of ImageOut objects containing image paths, names,
+    and bounding box details.
+    """
     images = []
 
     data_path = "./mock_maps"
@@ -63,16 +77,9 @@ def SearchImage(top: float, bottom: float, left: float, right: float):
 
     for file in input_files:
         bounding_box = get_bounding_box_from_file(file)
-
-        # if rect_overlap(
-        #     (bounding_box["top"], bounding_box["right"]),
-        #     (bounding_box["bottom"], bounding_box["left"]),
-        #     (area_of_interest["top"], area_of_interest["right"]),
-        #     (area_of_interest["bottom"], area_of_interest["left"]),
-        # ):
-        last_slash = file.rfind("/") + 1  # Ocurrencia de la última diagonal + 1
-        last_dot = file.rfind(".")  # Ocurrencia del último punto
-        filename = file[last_slash:last_dot]  # Nombre de la imagen
+        last_slash = file.rfind("/") + 1  # Occurrence of the last slash + 1
+        last_dot = file.rfind(".")  # Occurrence of the last dot
+        filename = file[last_slash:last_dot]  # Image name
         bounding_box_out = BoundingBox(
             left=bounding_box["left"],
             bottom=bounding_box["bottom"],

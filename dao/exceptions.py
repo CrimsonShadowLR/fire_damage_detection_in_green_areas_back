@@ -1,7 +1,7 @@
 from fastapi import status
 
 
-class FSException(Exception):
+class ExceptionSummary(Exception):
     status_code: int = status.HTTP_422_UNPROCESSABLE_ENTITY
     error_code: str
     error_message: str

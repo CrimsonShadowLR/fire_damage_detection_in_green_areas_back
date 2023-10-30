@@ -8,4 +8,7 @@ router = APIRouter()
 def search_images(
     filepath: str = Body(...),
 ):
+    """
+    Endpoint searchs and returns the image for the given filepath
+    """
     return PredictResource(filepath=filepath)

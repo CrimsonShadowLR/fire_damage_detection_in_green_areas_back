@@ -22,27 +22,26 @@ MODEL_PATH = "trained_models/model_20_percent_burn_Unet11_400epochs_sentinel"
 
 
 def convert_mask_to_png(filename, raster, metadata, colours=[255, 0, 255]):
-    """Transforma una máscara en una imagen png para su visualización en plataformas web.
+    """
+    Processes a preprocessed satellite image using a segmentation model to generate a
+    segmentation mask.
 
-    :param filename: ruta de la máscara originalmente generada como TIF
+    :param filename: Path to the mask originally generated as a TIF file.
     :type filename: str
 
-
-    :param raster: matriz bidimensional con los valores de la máscara
+    :param raster: Two-dimensional array with the values of the mask.
     :type raster: np.ndarray
 
-
-    :param metadata: diccionario con los metadatos de la máscara
+    :param metadata: Dictionary containing the metadata of the mask.
     :type metadata: dict
 
-    :param colours: colores para colorear la máscara
+    :param colours: Colors used to color the mask.
     :type colours: tuple[int, int, int]
 
-    :param level: índice del nivel
+    :param level: Index of the level.
     :type level: str
 
     :rtype: str
-
     """
     new_metadata = metadata
     new_metadata["count"] = 3
@@ -64,20 +63,17 @@ def convert_mask_to_png(filename, raster, metadata, colours=[255, 0, 255]):
 
 
 def convert_raster_to_png(filename, raster, metadata):
-    """Transforma una imagen satelital en una imagen png para su visualización en
-        plataformas web.
+    """
+    Transforms a satellite image into a PNG image for visualization on web platforms.
 
-    :param filename: ruta del raster original
+    :param filename: Path of the original raster.
     :type filename: str
 
-
-    :param raster: matriz bidimensional con los valores del raster
+    :param raster: Two-dimensional array with the values of the raster.
     :type raster: np.ndarray
 
-
-    :param metadata: diccionario con los metadatos del raster
+    :param metadata: Dictionary containing the metadata of the raster.
     :type metadata: dict
-
     """
     new_metadata = metadata
     new_metadata["count"] = 3
@@ -95,12 +91,21 @@ def convert_raster_to_png(filename, raster, metadata):
 
 
 def PredictResource(filepath: str):
+    """
+    Process an image file to generate masks and metadata.
+
+    Parameters:
+    filepath (str): The path to the image file.
+
+    Returns:
+    dict: A response containing filename, bounding box, and paths to generated layers.
+    """
     start = time.time()
     logger.debug("Receiving image...")
 
-    last_slash = filepath.rfind("/") + 1  # Ocurrencia de la última diagonal + 1
-    last_dot = filepath.rfind(".")  # Ocurrencia del último punto
-    filename = filepath[last_slash:last_dot]  # Nombre de la imagen
+    last_slash = filepath.rfind("/") + 1 # Occurrence of the last slash + 1
+    last_dot = filepath.rfind(".")  # Occurrence of the last dot
+    filename = filepath[last_slash:last_dot]  # Image name
 
     logger.debug("Filename: {}".format(filename))
 

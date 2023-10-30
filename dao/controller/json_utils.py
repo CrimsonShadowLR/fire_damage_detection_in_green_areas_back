@@ -2,16 +2,8 @@ import dateutil.parser
 
 
 def build_response(filename, bounding_box, masks, is_located=None):
-    """Prepara los datos a enviar en un diccionario entendible por el solicitante
-
-    :param bounding_box: diccionario de coordenadas
-    :type bounding_box: dict
-
-    :param masks: lista de direcciones de máscaras
-    :type masks: list
-
-    :param is_located: describe si la imagen fue encontrada o no
-    :type is_located: bool
+    """
+    Prepares the data to be sent in a dictionary understandable by the requester.
     """
 
     if is_located is False:
@@ -37,11 +29,8 @@ def build_response(filename, bounding_box, masks, is_located=None):
 
 
 def read_search_data(json_data):
-    """Lee una petición de búsqueda de imágenes satelitales.
-
-    :param json_data: datos en formato JSON con la fecha de inicio, la fecha de fin y
-     las coordenadas de búsqued
-    :type json_data: dict
+    """
+    Reads a request for satellite image search.
     """
     start_date = dateutil.parser.parse(json_data["start_date"])
     end_date = dateutil.parser.parse(json_data["end_date"])

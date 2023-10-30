@@ -12,4 +12,8 @@ def search_images(
     left: float = Body(...),
     right: float = Body(...),
 ):
+    """
+    Endpoint searches for image filenames whose metadata contains coordinates
+    within the specified range.
+    """
     return SearchImage(top=top, bottom=bottom, left=left, right=right)

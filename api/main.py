@@ -2,7 +2,7 @@ import os
 from typing import Any
 
 import django
-from dao.exceptions import FSException
+from dao.exceptions import ExceptionSummary
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -35,8 +35,8 @@ app.add_middleware(
 )
 
 
-@app.exception_handler(FSException)
-def fs_exception_handler(request: Request, cmd_exception: FSException):
+@app.exception_handler(ExceptionSummary)
+def exception_handler(request: Request, cmd_exception: ExceptionSummary):
     return JSONResponse(
         status_code=cmd_exception.status_code,
         content=cmd_exception.detail,
